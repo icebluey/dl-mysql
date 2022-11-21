@@ -23,18 +23,18 @@ if [[ ! -e /bin/dd ]]; then
     exit 1
 fi
 
-#_mysql_ver=$(wget -qO- 'https://dev.mysql.com/downloads/mysql/' | grep '<h1>MySQL Community Server 8\.' | sed 's| |\n|g' | grep '^8\.' | sort -V | tail -n 1)
-
 if [[ -z "${1}" ]]; then
     _mysql_ver=$(wget -qO- 'https://dev.mysql.com/downloads/mysql/' | grep '<h1>MySQL Community Server 8\.' | sed 's| |\n|g' | grep '^8\.' | sort -V | tail -n 1)
     echo
     printf '\e[01;32m%s\e[m\n' "MySQL Community Server Latest Version: ${_mysql_ver}"
     echo
+    wget -c -t 0 -T 9 "https://cdn.mysql.com/Downloads/MySQL-8.0/mysql-${_mysql_ver}-linux-glibc2.17-x86_64-minimal.tar.xz"
 else
     _mysql_ver="${1}"
     echo
     printf '\e[01;31m%s\e[m\n' "MySQL Community Server: ${_mysql_ver}"
     echo
+    wget -c -t 0 -T 9 "https://cdn.mysql.com/archives/mysql-8.0/mysql-${_mysql_ver}-linux-glibc2.17-x86_64-minimal.tar.xz"
 fi
 
 sleep 2
@@ -42,12 +42,10 @@ rm -fr /tmp/mysql
 _tmp_dir="$(mktemp -d)"
 cd "${_tmp_dir}"
 
-wget -c -t 0 -T 9 "https://cdn.mysql.com/Downloads/MySQL-8.0/mysql-${_mysql_ver}-linux-glibc2.17-x86_64-minimal.tar.xz"
-sleep 1
+#wget -c -t 0 -T 9 "https://cdn.mysql.com/Downloads/MySQL-8.0/mysql-${_mysql_ver}-linux-glibc2.17-x86_64-minimal.tar.xz"
 tar -xf "mysql-${_mysql_ver}-linux-glibc2.17-x86_64-minimal.tar.xz"
 
 #wget -c -t 0 -T 9 "https://cdn.mysql.com/Downloads/MySQL-Shell/mysql-shell-${_mysql_ver}-linux-glibc2.12-x86-64bit.tar.gz"
-#sleep 1
 #tar -xf "mysql-shell-${_mysql_ver}-linux-glibc2.12-x86-64bit.tar.gz"
 
 sleep 2
@@ -55,10 +53,21 @@ rm -f mysql-*.tar*
 
 ###############################################################################
 mkdir rpms && cd rpms
-#wget -c -t 0 -T 9 "https://cdn.mysql.com/Downloads/MySQL-8.0/mysql-community-libs-${_mysql_ver}-1.el7.x86_64.rpm"
-wget -c -t 0 -T 9 "https://cdn.mysql.com/Downloads/MySQL-8.0/mysql-community-embedded-compat-${_mysql_ver}-1.el7.x86_64.rpm"
-wget -c -t 0 -T 9 "https://cdn.mysql.com/Downloads/MySQL-8.0/mysql-community-libs-compat-${_mysql_ver}-1.el7.x86_64.rpm"
-wget -c -t 0 -T 9 "https://cdn.mysql.com/Downloads/MySQL-8.0/mysql-community-server-${_mysql_ver}-1.el7.x86_64.rpm"
+
+if [[ -z "${1}" ]]; then
+    _mysql_ver=$(wget -qO- 'https://dev.mysql.com/downloads/mysql/' | grep '<h1>MySQL Community Server 8\.' | sed 's| |\n|g' | grep '^8\.' | sort -V | tail -n 1)
+    #wget -c -t 0 -T 9 "https://cdn.mysql.com/Downloads/MySQL-8.0/mysql-community-libs-${_mysql_ver}-1.el7.x86_64.rpm"
+    wget -c -t 0 -T 9 "https://cdn.mysql.com/Downloads/MySQL-8.0/mysql-community-embedded-compat-${_mysql_ver}-1.el7.x86_64.rpm"
+    wget -c -t 0 -T 9 "https://cdn.mysql.com/Downloads/MySQL-8.0/mysql-community-libs-compat-${_mysql_ver}-1.el7.x86_64.rpm"
+    wget -c -t 0 -T 9 "https://cdn.mysql.com/Downloads/MySQL-8.0/mysql-community-server-${_mysql_ver}-1.el7.x86_64.rpm"
+else
+    _mysql_ver="${1}"
+    #wget -c -t 0 -T 9 "https://cdn.mysql.com/archives/mysql-8.0/mysql-community-libs-${_mysql_ver}-1.el7.x86_64.rpm"
+    wget -c -t 0 -T 9 "https://cdn.mysql.com/archives/mysql-8.0/mysql-community-embedded-compat-${_mysql_ver}-1.el7.x86_64.rpm"
+    wget -c -t 0 -T 9 "https://cdn.mysql.com/archives/mysql-8.0/mysql-community-libs-compat-${_mysql_ver}-1.el7.x86_64.rpm"
+    wget -c -t 0 -T 9 "https://cdn.mysql.com/archives/mysql-8.0/mysql-community-server-${_mysql_ver}-1.el7.x86_64.rpm"
+fi
+
 rpm2cpio "mysql-community-embedded-compat-${_mysql_ver}-1.el7.x86_64.rpm" | cpio -mid
 rm -f etc/ld.so.conf.d/mysql-x86_64.conf
 rpm2cpio "mysql-community-libs-compat-${_mysql_ver}-1.el7.x86_64.rpm" | cpio -mid
