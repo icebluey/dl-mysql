@@ -43,7 +43,7 @@ _tmp_dir="$(mktemp -d)"
 cd "${_tmp_dir}"
 
 #wget -c -t 0 -T 9 "https://cdn.mysql.com/Downloads/MySQL-8.0/mysql-${_mysql_ver}-linux-glibc2.17-x86_64-minimal.tar.xz"
-tar -xf "mysql-${_mysql_ver}-linux-glibc2.17-x86_64-minimal.tar.xz"
+tar -xof "mysql-${_mysql_ver}-linux-glibc2.17-x86_64-minimal.tar.xz"
 
 #wget -c -t 0 -T 9 "https://cdn.mysql.com/Downloads/MySQL-Shell/mysql-shell-${_mysql_ver}-linux-glibc2.12-x86-64bit.tar.gz"
 #tar -xf "mysql-shell-${_mysql_ver}-linux-glibc2.12-x86-64bit.tar.gz"
