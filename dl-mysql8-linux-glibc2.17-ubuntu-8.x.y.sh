@@ -15,6 +15,10 @@ if [[ ! -e /bin/dd ]]; then
     exit 1
 fi
 
+rm -fr /tmp/mysql
+_tmp_dir="$(mktemp -d)"
+cd "${_tmp_dir}"
+
 if [[ -z "${1}" ]]; then
     _mysql_ver=$(wget -qO- 'https://dev.mysql.com/downloads/mysql/' | grep '<h1>MySQL Community Server 8\.' | sed 's| |\n|g' | grep '^8\.' | sort -V | tail -n 1)
     echo
@@ -30,8 +34,6 @@ else
 fi
 
 sleep 2
-rm -fr /tmp/mysql
-_tmp_dir="$(mktemp -d)"
 
 install -m 0755 -d /tmp/mysql/usr/sbin
 install -m 0755 -d /tmp/mysql/usr/include
@@ -39,8 +41,6 @@ install -m 0755 -d /tmp/mysql/usr/lib/x86_64-linux-gnu
 install -m 0755 -d /tmp/mysql/etc/mysql/conf.d
 install -m 0755 -d /tmp/mysql/etc/mysql/mysql.conf.d
 install -m 0755 -d /tmp/mysql/usr/share
-
-cd "${_tmp_dir}"
 
 #wget -c -t 0 -T 9 "https://cdn.mysql.com/Downloads/MySQL-8.0/mysql-${_mysql_ver}-linux-glibc2.17-x86_64-minimal.tar.xz"
 tar -xof "mysql-${_mysql_ver}-linux-glibc2.17-x86_64-minimal.tar.xz"
