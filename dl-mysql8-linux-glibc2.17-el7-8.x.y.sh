@@ -6,19 +6,19 @@ umask 022
 
 set -e
 
-if [[ -e /bin/rpm2cpio ]]; then
+if [[ ! -e /bin/rpm2cpio ]]; then
     echo "no file: /bin/rpm2cpio"
     exit 1
 fi
-if [[ -e /bin/cpio ]]; then
+if [[ ! -e /bin/cpio ]]; then
     echo "no file: /bin/cpio"
     exit 1
 fi
-if [[ -e /usr/bin/printf ]]; then
+if [[ ! -e /usr/bin/printf ]]; then
     echo "no file: /usr/bin/printf"
     exit 1
 fi
-if [[ -e /bin/dd ]]; then
+if [[ ! -e /bin/dd ]]; then
     echo "no file: /bin/dd"
     exit 1
 fi
