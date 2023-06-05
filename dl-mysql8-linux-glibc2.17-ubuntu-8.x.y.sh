@@ -300,13 +300,6 @@ systemctl daemon-reload
 /sbin/ldconfig
 ' > etc/mysql/.install.txt
 
-echo '
-install -v -c -m 0755 /opt/gcc/lib/libstdc++.so.6.0.25 /usr/lib/x86_64-linux-gnu/mysql/private/
-install -v -c -m 0644 /opt/gcc/lib/libgcc_s.so.1 /usr/lib/x86_64-linux-gnu/mysql/private/
-ln -sv libstdc++.so.6.0.25 /usr/lib/x86_64-linux-gnu/mysql/private/libstdc++.so.6
-' > etc/mysql/.cp-libstdc.txt
-
-
 ln -svf mysql.cnf etc/mysql/my.cnf
 
 sed 's|^prefix=.*|prefix=/usr|g' -i usr/lib/x86_64-linux-gnu/pkgconfig/mysql*.pc
