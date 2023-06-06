@@ -341,6 +341,18 @@ fi
 
 ###############################################################################
 
+rm -fr /tmp/openssl111.tmp
+mkdir /tmp/openssl111.tmp
+wget -q -O /tmp/openssl111.tmp/.openssl-libs.tar.xz \
+"https://github.com/icebluey/openssl-libs/releases/download/v1.1.1u/openssl-libs-1.1.1u-el.tar.xz"
+tar -xof /tmp/openssl111.tmp/.openssl-libs.tar.xz -C /tmp/openssl111.tmp/
+rm -f usr/lib64/mysql/private/libz.so*
+rm -f usr/lib64/mysql/private/libcrypto.so*
+rm -f usr/lib64/mysql/private/libssl.so*
+cp -af /tmp/openssl111.tmp/openssl*/*.so* usr/lib64/mysql/private/
+sleep 1
+rm -fr /tmp/openssl111.tmp
+
 cp -af /usr/lib64/libncurses.so.5* usr/lib64/mysql/private/
 cp -af /usr/lib64/libtinfo.so.5* usr/lib64/mysql/private/
 
