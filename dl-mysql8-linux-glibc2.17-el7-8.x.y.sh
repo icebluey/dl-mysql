@@ -341,6 +341,9 @@ fi
 
 ###############################################################################
 
+cp -af /usr/lib64/libncurses.so.5* usr/lib64/mysql/private/
+cp -af /usr/lib64/libtinfo.so.5* usr/lib64/mysql/private/
+
 chmod 0644 etc/mysql/conf.d/mysql.cnf
 chmod 0644 etc/mysql/mysql.conf.d/mysqld.cnf
 chown -R root:root /tmp/mysql
